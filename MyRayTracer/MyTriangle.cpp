@@ -84,7 +84,7 @@ bool MyTriangle::Intersection(const Ray &ray, HitInfo &output)
 
 	vec3 q = ray.O + output.tValue * ray.D; // hit point
 
-											// Compute barycentric coordinates
+	// Compute barycentric coordinates
 	vec3 vAQ = q - A;
 
 	float dAB_AB = dot(vAB, vAB);

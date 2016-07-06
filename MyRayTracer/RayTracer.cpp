@@ -113,25 +113,33 @@ vec4 RayTracer::RecursiveCall(int depth, HitInfo hit, const Scene *scene)
 	}else
 	if (hit.hasInstersected)
 	{
-		//vec4 lambert = vec4(0.0f);
 
 		vec4 total = vec4(0.0f);
 		vec4 Ir = vec4(0.0f);
 		bool isInDarkness;
 
 		total = LightPoint(hit, scene, isInDarkness);
-			
-		// Recursive Call
-		// Get reflected direction ray
-		/*vec3 reflectedDir = normalize(glm::reflect(hit.ray.D, vec3(hit.N)));
-		vec3 P = hit.P + (reflectedDir  * (EPSILON_ADDED));
-		vec3 D = reflectedDir;
-		Ray rayReflected = Ray(P, D, 0.0f);
-		HitInfo hitReflectedRay = Intersect(rayReflected, scene);
-		Ir = RecursiveCall(depth - 1, hitReflectedRay, scene);*/
+		total = total + hit.material.Ka + hit.material.emission;
+		
+		if (!isInDarkness)
+		{
 
+			// Recursive Call
+			// Get reflected direction ray
+			vec3 reflectedDir = normalize(glm::reflect(hit.ray.D, hit.N));
+			vec3 P = hit.P + (reflectedDir  * (EPSILON_ADDED));
+			vec3 D = reflectedDir;
+			Ray rayReflected = Ray(P, D, 0.0f);
+			HitInfo hitReflectedRay = Intersect(rayReflected, scene);
+			Ir = RecursiveCall(depth - 1, hitReflectedRay, scene);
+		
+		}
+		
+		
+	//	Ir = RecursiveCall(depth - 1, hitReflectedRay, scene);
+		total = total + (Ir * hit.material.Ks);
 		// Sum all values
-		total = total + hit.material.Ka + hit.material.emission + (Ir * hit.material.Ks);
+		
 		return total;
 
 
@@ -140,69 +148,69 @@ vec4 RayTracer::RecursiveCall(int depth, HitInfo hit, const Scene *scene)
 		return vec4(0.0f);
 }
 
-vec4 RayTracer::FindColor(HitInfo hit, const Scene *scene)
-{
-	if (hit.hasInstersected)
-	{
-		//vec4 lambert = vec4(0.0f);
+//vec4 RayTracer::FindColor(HitInfo hit, const Scene *scene)
+//{
+//	if (hit.hasInstersected)
+//	{
+//		//vec4 lambert = vec4(0.0f);
+//
+//		vec4 total = vec4(0.0f);
+//		vec4 Ir = vec4();
+//		bool isInDarkness;
+//
+//		total = LightPoint(hit, scene, isInDarkness);
+//		/*if (!isInDarkness)
+//			Ir = GetReflectColor(RENDERSETTINGS->tracerDepth, hit, scene);*/
+//
+//		total = total + hit.material.Ka + hit.material.emission + (Ir * hit.material.Ks);
+//		//CorrectColor(total);
+//		return total * 255.0f;
+//	}		
+//	else
+//		return vec4(0.0f);
+//}
 
-		vec4 total = vec4(0.0f);
-		vec4 Ir = vec4();
-		bool isInDarkness;
-
-		total = LightPoint(hit, scene, isInDarkness);
-		/*if (!isInDarkness)
-			Ir = GetReflectColor(RENDERSETTINGS->tracerDepth, hit, scene);*/
-
-		total = total + hit.material.Ka + hit.material.emission + (Ir * hit.material.Ks);
-		//CorrectColor(total);
-		return total * 255.0f;
-	}		
-	else
-		return vec4(0.0f);
-}
-
-vec4 RayTracer::GetReflectColor(int depth, HitInfo hit, const Scene * scene)
-{
-	
-	
-	// Base case
-	if (depth == 0)
-	{
-		return vec4();
-	}
-	else
-	{
-		vec3 reflectedDir = normalize(glm::reflect(hit.ray.D, vec3(hit.N)));
-		vec3 P = hit.P + (reflectedDir  * (EPSILON_ADDED));
-		vec3 D = reflectedDir;
-		Ray ray = Ray(P, D, 0.0f);
-		
-		HitInfo hitNew = Intersect(ray, scene);
-
-		if (hitNew.hasInstersected)
-		{
-			bool isInDarkness;
-			vec4 total = LightPoint(hitNew, scene, isInDarkness);
-			vec4 Ir = vec4();
-			
-			total = LightPoint(hitNew, scene, isInDarkness);
-			
-			if (!isInDarkness)
-				Ir = GetReflectColor(depth-1, hitNew, scene);
-
-			return total + hitNew.material.Ka + hitNew.material.emission + (Ir * hitNew.material.Ks);
-			
-			
-		}
-		else
-		{
-			return vec4(); // end recursivity
-			
-		}
-	}
-		
-}
+//vec4 RayTracer::GetReflectColor(int depth, HitInfo hit, const Scene * scene)
+//{
+//	
+//	
+//	// Base case
+//	if (depth == 0)
+//	{
+//		return vec4();
+//	}
+//	else
+//	{
+//		vec3 reflectedDir = normalize(glm::reflect(hit.ray.D, vec3(hit.N)));
+//		vec3 P = hit.P + (reflectedDir  * (EPSILON_ADDED));
+//		vec3 D = reflectedDir;
+//		Ray ray = Ray(P, D, 0.0f);
+//		
+//		HitInfo hitNew = Intersect(ray, scene);
+//
+//		if (hitNew.hasInstersected)
+//		{
+//			bool isInDarkness;
+//			vec4 total = LightPoint(hitNew, scene, isInDarkness);
+//			vec4 Ir = vec4();
+//			
+//			total = LightPoint(hitNew, scene, isInDarkness);
+//			
+//			if (!isInDarkness)
+//				Ir = GetReflectColor(depth-1, hitNew, scene);
+//
+//			return total + hitNew.material.Ka + hitNew.material.emission + (Ir * hitNew.material.Ks);
+//			
+//			
+//		}
+//		else
+//		{
+//			return vec4(); // end recursivity
+//			
+//		}
+//	}
+//		
+//}
 
 float CalcAttenuation(const Light *l, float dist)
 {
@@ -231,8 +239,8 @@ vec4 RayTracer::LightPoint(HitInfo hit, const Scene *scene, bool &isInDarkness)
 			// is at least visible for one light
 			isInDarkness = false;
 		}
-		else
-			total = vec4(1.0f, 0.0f, 0.0f, 0.0f);
+		/*else
+			total = vec4(1.0f, 0.0f, 0.0f, 0.0f);*/
 				
 	}
 
@@ -249,7 +257,7 @@ vec4 RayTracer::ComputeLight(HitInfo hit, const Scene *scene, const Light * ligh
 		direction = normalize(light->pos - hit.P);
 	else
 	{
-		direction = -normalize(light->direction);
+		direction = normalize(light->direction);
 	}
 
 	float nDotL = dot(hit.N, direction);
@@ -282,7 +290,6 @@ bool RayTracer::IsLightBlocked(vec3 lightPos, vec3 point, const Scene * scene)
 {
 	// Calc the ray components
 	vec3 dirToLight = lightPos - point;	
-	double a, b, c;	
 	double tmin = glm::length(dirToLight);
 
 	dirToLight = normalize(dirToLight);
@@ -290,7 +297,7 @@ bool RayTracer::IsLightBlocked(vec3 lightPos, vec3 point, const Scene * scene)
 	
 	
 	// Create the ray 
-	Ray rayToLight = Ray(point, normalize(dirToLight), tmin);
+	Ray rayToLight = Ray(point, dirToLight, tmin);
 	
 	HitInfo closestIntersection = HitInfo(vec3(), vec3(), FLT_MAX);
 

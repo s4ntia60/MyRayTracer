@@ -17,9 +17,9 @@ public:
 
 	MyImage RayTrace(Camera *cam, const Scene *scene, int width, int height);
 	HitInfo Intersect(Ray ray, const Scene * scene);
-	vec4 FindColor(HitInfo hit, const Scene * scene);
+	//vec4 FindColor(HitInfo hit, const Scene * scene);
 	bool IsLightBlocked(vec3 lightPos, vec3 point, const Scene * scene);
-	vec4 GetReflectColor(int depth, HitInfo hit, const Scene * scene);
+	//vec4 GetReflectColor(int depth, HitInfo hit, const Scene * scene);
 	//vec3 ShadingModel(vec3 direction, vec3 eyepos, vec3 lightcolor, vec3 normal, vec3 halfvec, MyMaterial mat);
 	vec4 LightPoint(HitInfo hit, const Scene *scene, bool & isInDarkness);
 	vec4 ComputeLight(HitInfo hit, const Scene *scene, const Light * light);
