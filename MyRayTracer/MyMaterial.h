@@ -1,4 +1,6 @@
 #pragma once
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
 #include <glm\glm.hpp>
 using namespace glm;
 

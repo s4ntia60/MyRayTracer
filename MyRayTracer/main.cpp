@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
 #include <glm\glm.hpp>
 #include <free_image\FreeImage.h>
 #include "RayTracer.h"

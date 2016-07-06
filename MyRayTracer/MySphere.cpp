@@ -1,5 +1,7 @@
 #include "MySphere.h"
 #include <iostream>
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
 #include <glm\glm.hpp>
 using namespace glm;
 
@@ -25,21 +27,21 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 	vec3 D = normalize(vec3(inverse * vec4(ray.D, 0.0)));	// 0 -> vector
 
 	//A = Xd^2 + Yd^2 + Zd^2 = 1 since |P1| 
-	const float A = pow(D.x, 2.0) + pow(D.y, 2.0) + pow(D.z, 2.0);
+	const double A = pow(D.x, 2.0) + pow(D.y, 2.0) + pow(D.z, 2.0);
 	
 
 	// B = 2 * (Xd * (X0 - Xc) + Yd * (Y0 - Yc) + Zd * (Z0 - Zc))
-	const float B = 2.0f * (D.x * (O.x - x) +
+	const double B = 2.0f * (D.x * (O.x - x) +
 		(D.y * (O.y - y)) +
 		(D.z * (O.z - z)));
 
 	// C = (X0 - Xc) ^ 2 + (Y0 - Yc) ^ 2 + (Z0 - Zc) ^ 2 - Sr ^ 2
-	const float C = pow((O.x - x), 2.0) +
+	const double C = pow((O.x - x), 2.0) +
 		pow((O.y - y), 2.0) +
 		pow((O.z - z), 2.0) -
 		pow(radius, 2.0);
 
-	const float discriminant = (B * B) - (4.0 *A* C);
+	const double discriminant = (B * B) - (4.0 *A* C);
 
 
 	if (discriminant < 0.0) // No intersection
@@ -48,11 +50,11 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 	}
 	else if (discriminant >= 0.0)
 	{
-		const float sqrtDiscriminant = sqrt(discriminant);
+		const double sqrtDiscriminant = sqrt(discriminant);
 		
 		// calc t0 and check if it is valid
-		float t0 = (-B - sqrtDiscriminant) / (2.0f * A);
-		float t1 = 0.0;
+		double t0 = (-B - sqrtDiscriminant) / (2.0f * A);
+		double t1 = 0.0;
 
 		/*if (t0 > 0.0f && t1 < 0.0f)
 			std::cout << "Punto interior" << endl;
@@ -60,7 +62,7 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 			std::cout << "Punto interior" << endl;
 */
 		
-		float tValue = 0;
+		double tValue = 0;
 
 		// t0 is valid
 		if (t0 > 0.0)
@@ -80,7 +82,7 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 		}
 
 		// compute intersection
-		vec4 intersectionP = vec4((O + D * tValue), 1.0);
+		vec4 intersectionP = vec4((O + D * (float)tValue), 1.0);
 		
 		// take intersection point back to the actual object's transform
 		vec4 intersectionObjSpace = transform * intersectionP;

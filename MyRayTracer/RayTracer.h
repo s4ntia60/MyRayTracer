@@ -4,7 +4,9 @@
 #include "Camera.h"
 #include "Ray.h"
 #include "HitInfo.h"
-#include "glm\glm.hpp"
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
+#include <glm\glm.hpp>
 class RayTracer
 {
 private: 

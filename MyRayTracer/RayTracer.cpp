@@ -6,7 +6,7 @@
 #include "Transform.h"
 #include "RenderSettings.h"
 #define EPSILON 0.000001f
-#define EPSILON_ADDED 0.0000300f
+#define EPSILON_ADDED 0.001f
 bool isDebbuging = false;
 
 
@@ -206,8 +206,11 @@ vec4 RayTracer::GetReflectColor(int depth, HitInfo hit, const Scene * scene)
 
 float CalcAttenuation(const Light *l, float dist)
 {
-	return		1.0f / 
+	if(l->lightType == point)
+		return		1.0f / 
 			(l->attenuation.x + (l->attenuation.y *dist) + (l->attenuation.z * dist * dist));
+	else 
+		return 1.0f;
 }
 
 vec4 RayTracer::LightPoint(HitInfo hit, const Scene *scene, bool &isInDarkness)

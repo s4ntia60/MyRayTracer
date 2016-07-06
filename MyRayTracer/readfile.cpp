@@ -27,6 +27,8 @@
 #include <sstream>
 #include <deque>
 #include <stack>
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
 #include <glm\glm.hpp>
 #include "Transform.h" 
 

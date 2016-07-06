@@ -1,5 +1,7 @@
 #pragma once
 #include <stack>
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
 #include <glm\glm.hpp>
 // Readfile definitions 
 class Scene;

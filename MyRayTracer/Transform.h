@@ -4,8 +4,9 @@
 // Rotate is a helper function
 
 // Include the helper glm library, including matrix transform extensions
-
-#include <glm/glm.hpp>
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
+#include <glm\glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 // glm provides vector, matrix classes like glsl

@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#define GLM_PRECISION_HIGHP_FLOAT
+#define GLM_PRECISION_HIGHP_DOUBLE
 #include <glm\glm.hpp>
 #include "MyTriangle.h"
 #include "MySphere.h"
