@@ -220,7 +220,7 @@ vec4 RayTracer::LightPoint(HitInfo hit, const Scene *scene, bool &isInDarkness)
 	vector<Light*>::const_iterator it;
 	for (it = scene->lights.begin(); it != scene->lights.end(); ++it)
 	{
-		if (!IsInDarkness((*it)->pos, hit.P, scene))
+		if (!IsLightBlocked((*it)->pos, hit.P, scene))
 		{
 			total = (total + ComputeLight(hit, scene, (*it)));
 
@@ -278,7 +278,7 @@ vec4 RayTracer::ComputeLight(HitInfo hit, const Scene *scene, const Light * ligh
 //	return lambert + phong;
 //}
 
-bool RayTracer::IsInDarkness(vec3 lightPos, vec3 point, const Scene * scene)
+bool RayTracer::IsLightBlocked(vec3 lightPos, vec3 point, const Scene * scene)
 {
 	// Calc the ray components
 	vec3 dirToLight = lightPos - point;	
