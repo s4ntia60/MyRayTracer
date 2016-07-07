@@ -49,7 +49,8 @@ MyImage RayTracer::RayTrace(Camera *cam, const Scene *scene, int width, int heig
 			//Ray ray = cam->eyeRay(Xmid, Ymid, width, height);
 			HitInfo hit = Intersect(ray, scene);
 			//vec3 color = vec3(FindColor(hit, scene));
-			vec3 color = vec3(RecursiveCall(RENDERSETTINGS->tracerDepth, hit, scene));
+			//vec3 color = vec3(RecursiveCall(RENDERSETTINGS->tracerDepth, hit, scene));
+			vec3 color = vec3(Radiance(ray, RENDERSETTINGS->tracerDepth, scene));
 			image.image[j][i] = clamp(color, 0.0f, 1.0f) * 255.0f;
 
 			if(i == 0)
@@ -110,10 +111,12 @@ vec4 RayTracer::RecursiveCall(int depth, HitInfo hit, const Scene *scene)
 	if (depth == 0)
 	{
 		return vec4();
-	}else
+	}
+	else
 	if (hit.hasInstersected)
 	{
 
+		//return normalize(vec4(hit.N, 1.0)) * 255.0f;
 		vec4 total = vec4(0.0f);
 		vec4 Ir = vec4(0.0f);
 		bool isInDarkness;
@@ -135,14 +138,8 @@ vec4 RayTracer::RecursiveCall(int depth, HitInfo hit, const Scene *scene)
 		
 		}
 		
-		
-	//	Ir = RecursiveCall(depth - 1, hitReflectedRay, scene);
 		total = total + (Ir * hit.material.Ks);
-		// Sum all values
-		
 		return total;
-
-
 	}
 	else
 		return vec4(0.0f);
@@ -214,11 +211,11 @@ vec4 RayTracer::RecursiveCall(int depth, HitInfo hit, const Scene *scene)
 
 float CalcAttenuation(const Light *l, float dist)
 {
-	if(l->lightType == point)
+	/*if(l->lightType == point)*/
 		return		1.0f / 
 			(l->attenuation.x + (l->attenuation.y *dist) + (l->attenuation.z * dist * dist));
-	else 
-		return 1.0f;
+	/*else 
+		return 1.0f;*/
 }
 
 vec4 RayTracer::LightPoint(HitInfo hit, const Scene *scene, bool &isInDarkness)
@@ -323,4 +320,95 @@ bool RayTracer::IsLightBlocked(vec3 lightPos, vec3 point, const Scene * scene)
 	}
 
 	return false;
+}
+
+vec4 RayTracer::Radiance(Ray &ray, int depth, const Scene * scene)
+{
+
+	HitInfo record;
+	if (depth-- == 0) {
+		return vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	} // depth to max
+
+	record = Intersect(ray, scene);
+
+	if (!record.hasInstersected) {
+		return vec4(0.0f, 0.0f, 0.0f, 0.0f); // if not hit  return black;
+	}
+
+	// if hit
+	vec4 col, col1;
+	vec4 diffuse;
+	vec4 specular;
+	vec4 total;
+	vec3 L, R, H;
+	
+	const MyMaterial mat = record.material;
+	col = mat.Ka;
+	col += mat.emission;
+	R = reflect(ray.D, record.N);// get the reflected ray
+										// to get the radiance value
+	vector<Light*>::const_iterator itr;
+	HitInfo record1;
+	for (itr = scene->lights.begin(); itr != scene->lights.end(); ++itr)
+	{
+		vec3 lightPos;
+		// should first check the light type;
+		if ((*itr)->lightType == point)
+		{
+			L = normalize((*itr)->pos - record.P);
+			lightPos = (*itr)->pos;
+		}
+		else
+		{
+			L = normalize((*itr)->direction);
+			lightPos = normalize((*itr)->direction) * 9999.0f;
+		}
+		
+
+
+		Ray ray1 = Ray(record.P, L, 199895652.0);
+		HitInfo toLightHit = Intersect(ray1, scene);
+		if (IsLightBlocked(lightPos, record.P , scene))
+		//if (toLightHit.hasInstersected) 
+		{
+			//  The following will not happen since we have add a bias to intersect t
+			//			if(record1.obj == record.obj){ 
+			//				if(record1.pos != record.pos){
+			//					printf("may come to error\n");
+			//				}
+			//			}	
+			continue;// if light is shadowed the pass
+		}
+
+		H = (L - ray.D) / 2.0f;// notice here
+		H = normalize(H);     // remember to normalize, otherwise errors occur
+						   // else not shadowed
+		float nDotL = dot(record.N, L);
+		float nDotH = dot(record.N, H);
+		diffuse += (*itr)->color * (nDotL >0.0 ? nDotL : 0);
+		specular += (*itr)->color * pow((nDotH > 0.0 ? nDotH : 0), mat.shininess);
+		
+		//// apply attenuation
+		float att = CalcAttenuation((*itr), length(record.P - (*itr)->pos));
+		diffuse = diffuse * att;
+		specular = specular * att;
+		// aplicarla a la luz no al diffuse o specular
+		//total = specular + diffuse;
+
+	}
+
+	col += mat.Kd * diffuse + mat.Ks * specular;
+	//col += mat.Kd * diffuse + mat.Ks * specular;
+
+	// recursive call
+	
+	Ray ref = Ray(record.P + R * EPSILON_ADDED, R, FLT_MAX);
+	col1 = Radiance(ref, depth, scene);
+	// add the color
+	col = col + col1 * mat.Ks;
+	// clamp the color
+	col = clamp(col, 0.0f, 1.0f);
+
+	return col;
 }

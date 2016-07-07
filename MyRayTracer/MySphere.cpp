@@ -21,7 +21,7 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 	const vec3 oldP1 = ray.D;
 
 	const mat4 inverse = inverseTransform;
-	//const mat4 inverse = sphere.inverseTransform;
+	
 	// apply inverse transform to the ray
 	vec3 O = vec3(inverse * vec4(ray.O, 1.0));				// 1 -> point
 	vec3 D = normalize(vec3(inverse * vec4(ray.D, 0.0)));	// 0 -> vector
@@ -54,13 +54,13 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 		
 		// calc t0 and check if it is valid
 		double t0 = (-B - sqrtDiscriminant) / (2.0f * A);
-		double t1 = 0.0;
+		double t1 = (-B + sqrtDiscriminant) / (2.0f * A);
 
 		/*if (t0 > 0.0f && t1 < 0.0f)
 			std::cout << "Punto interior" << endl;
 		if (t1 > 0.0f && t0 < 0.0f)
-			std::cout << "Punto interior" << endl;
-*/
+			std::cout << "Punto interior" << endl;*/
+
 		
 		double tValue = 0;
 
@@ -82,22 +82,20 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 		}
 
 		// compute intersection
-		vec4 intersectionP = vec4((O + D * (float)tValue), 1.0);
-		
 		// take intersection point back to the actual object's transform
+		vec4 intersectionP = vec4((O + D * (float)tValue), 1.0);				
 		vec4 intersectionObjSpace = transform * intersectionP;
 		
-
+		// Calc normal
 		vec4 normal = normalize(intersectionP - vec4(x, y, z, 0.0f));
-
 		vec3 normalTransformed = normalize(inverseTransposeTransform3x3 * vec3(normal));
 
-		float t = glm::length(vec3(intersectionObjSpace) - oldP0);
+		// Calc depth value
+		float t = glm::length(vec3(intersectionObjSpace) - oldP0);		
 		
-		output = HitInfo(vec3(intersectionObjSpace), normalTransformed, t);
-
+		// Set output
+		output = HitInfo(vec3(intersectionObjSpace), vec3(normalTransformed), t);
 		output.hasInstersected = true;
-
 		output.material = material;
 
 		return true;
@@ -107,3 +105,5 @@ bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 	return false;
 
 }
+
+

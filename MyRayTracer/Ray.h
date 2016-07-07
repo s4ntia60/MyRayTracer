@@ -12,7 +12,7 @@ class Ray
 	public:
 		glm::vec3 O;
 		glm::vec3 D;
-		float t;
+		double t;
 		Ray(glm::vec3 O, glm::vec3 D, float t);
 		~Ray();
 };

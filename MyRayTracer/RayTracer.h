@@ -24,6 +24,7 @@ public:
 	vec4 LightPoint(HitInfo hit, const Scene *scene, bool & isInDarkness);
 	vec4 ComputeLight(HitInfo hit, const Scene *scene, const Light * light);
 	vec4 RecursiveCall(int depth, HitInfo hit, const Scene *scene);
+	vec4 Radiance(Ray &ray, int depth, const Scene * scene);
 	//HitInfo TestSphereIntersection(Ray ray, MySphere sphere);
 	//HitInfo TestMeshIntersection(Ray ray, MyTriangle tri, Scene * scene, Camera * cam);
 	

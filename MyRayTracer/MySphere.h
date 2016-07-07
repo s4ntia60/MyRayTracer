@@ -19,4 +19,5 @@ public:
 	};
 	virtual void PreCalc() override;
 	bool Intersection(const Ray &ray, HitInfo &output) override;
+	
 };
