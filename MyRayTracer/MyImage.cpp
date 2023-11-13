@@ -1,5 +1,6 @@
 #include "MyImage.h"
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -43,6 +44,42 @@ MyImage::MyImage(int width, int height)
 
 MyImage::~MyImage()
 {
+}
+
+
+std::vector<unsigned char> MyImage::to_char_vector()
+{
+  if (!image) 
+    throw std::invalid_argument("image is null");
+
+	int size = 4 * this->width * this->height;
+  std::vector<unsigned char> data(size);
+	int row = height-1;
+	int col = 0;
+  int i = 0;
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      data[i++] = (unsigned char) image[row][col].x;
+      data[i++] = (unsigned char) image[row][col].y;
+      data[i++] = (unsigned char) image[row][col].z;
+      data[i++] = 255;
+      // data[i++] = 255;
+      // data[i++] = 0;
+      // data[i++] = 0;
+      // data[i++] = 255;
+
+      col++;
+
+      if (col >= width)
+      {
+        col = 0;
+        row--;			
+      }
+    }
+  }
+
+    return data;
 }
 
 // Return a 1-D array with the image info as a sequence of bytes

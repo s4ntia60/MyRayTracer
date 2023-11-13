@@ -8,6 +8,8 @@
 #include "readfile.h"
 #include "RenderSettings.h"
 #include "Camera.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
 //
 //
 using namespace std;
@@ -74,7 +76,9 @@ int main(int argc, char * argv[])
 	MyImage image = tracer.RayTrace(cam, scene, RENDERSETTINGS->width, RENDERSETTINGS->height);
 
 	// SaveImageFile(image, "" + RENDERSETTINGS->outputFile);
-
+  // std::vector<unsigned char> data = image.to_char_vector();
+  std::vector<unsigned char> data = image.to_char_vector();
+  return stbi_write_png( "foo.png", RENDERSETTINGS->width, RENDERSETTINGS->height, 4, &(data[0]), 4*RENDERSETTINGS->width);
 /* 	system("PAUSE"); */
 
 	return 0;

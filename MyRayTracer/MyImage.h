@@ -2,7 +2,8 @@
 #define GLM_PRECISION_HIGHP_FLOAT
 #define GLM_PRECISION_HIGHP_DOUBLE
 #include <glm/glm.hpp>
-// #include <free_image/FreeImage.h>
+#include <vector>
+// free_image/FreeImage.h>
 using namespace glm;
 
 class MyImage
@@ -14,6 +15,7 @@ public:
 	int height;
 	vec3 **image = nullptr;
 	// BYTE * ConvertToOneRowArray();
+  std::vector<unsigned char> to_char_vector();
 
 };
 

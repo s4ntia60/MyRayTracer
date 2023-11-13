@@ -13,7 +13,7 @@ Camera::Camera(glm::vec3 _lookfrom, glm::vec3 _lookat, glm::vec3 _up, float _fov
 	fovY = _fovy;
 }
 
-// Camera::Camera(){}
+Camera::Camera(){}
 
 void Camera::PreCalc()
 {
