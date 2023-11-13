@@ -1,8 +1,8 @@
 #pragma once
 #define GLM_PRECISION_HIGHP_FLOAT
 #define GLM_PRECISION_HIGHP_DOUBLE
-#include <glm\glm.hpp>
-#include <free_image\FreeImage.h>
+#include <glm/glm.hpp>
+// #include <free_image/FreeImage.h>
 using namespace glm;
 
 class MyImage
@@ -13,7 +13,7 @@ public:
 	int width;
 	int height;
 	vec3 **image = nullptr;
-	BYTE * ConvertToOneRowArray();
+	// BYTE * ConvertToOneRowArray();
 
 };
 

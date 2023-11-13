@@ -258,13 +258,13 @@ vec4 RayTracer::ComputeLight(HitInfo hit, const Scene *scene, const Light * ligh
 	}
 
 	float nDotL = dot(hit.N, direction);
-	vec4 lambert = hit.material.Kd * light->color * max(nDotL, 0.0f);
+	vec4 lambert = hit.material.Kd * light->color * glm::max(nDotL, 0.0f);
 
 	vec3 eyedirn = normalize(scene->camPos - hit.P);
 	vec3 halfvec = normalize(direction + eyedirn);
 
 	float nDotH = dot(hit.N, halfvec);
-	vec4 phong = hit.material.Ks * light->color * pow(max(nDotH, 0.0f), hit.material.shininess);
+	vec4 phong = hit.material.Ks * light->color * pow(glm::max(nDotH, 0.0f), hit.material.shininess);
 	return phong + lambert;
 
 }

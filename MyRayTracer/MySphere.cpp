@@ -2,7 +2,7 @@
 #include <iostream>
 #define GLM_PRECISION_HIGHP_FLOAT
 #define GLM_PRECISION_HIGHP_DOUBLE
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 using namespace glm;
 
 void MySphere::PreCalc()
@@ -13,12 +13,10 @@ void MySphere::PreCalc()
 
 }
 
-
-
 bool MySphere::Intersection(const Ray & ray, HitInfo & output)
 {
 	const vec3 oldP0 = ray.O;
-	const vec3 oldP1 = ray.D;
+	const vec3 oldp1 = ray.D;
 
 	const mat4 inverse = inverseTransform;
 	

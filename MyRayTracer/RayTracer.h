@@ -6,7 +6,7 @@
 #include "HitInfo.h"
 #define GLM_PRECISION_HIGHP_FLOAT
 #define GLM_PRECISION_HIGHP_DOUBLE
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 class RayTracer
 {
 private: 

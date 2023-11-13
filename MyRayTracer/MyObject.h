@@ -3,7 +3,7 @@
 #include <vector>
 #define GLM_PRECISION_HIGHP_FLOAT
 #define GLM_PRECISION_HIGHP_DOUBLE
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 #include "Ray.h"
 #include "HitInfo.h"
 #include "MyMaterial.h"

@@ -46,76 +46,76 @@ MyImage::~MyImage()
 }
 
 // Return a 1-D array with the image info as a sequence of bytes
-BYTE * MyImage::ConvertToOneRowArray()
-{
-	if (!image) 
-		return nullptr;
-
-	int size = 3 * width * height;
-	BYTE *pixels = new BYTE[size];
-	int row = 0;
-	int col = 0;
-
-	// create matrix color 
-	//vec3 ** imageAux = new vec3*[height];
-
-	//for (int i = 0; i < height; i++)
-	//{
-	//	imageAux[i] = new vec3[width];
-	//}
-
-	//for (int i = 0; i < width; i++)
-	//	for (int j = 0; j < height; j++)
-	//	{
-	//		image
-	//	}
-
-
-	//for (int i = size-1-3; i >= 0; i -= 3)
-	for (int i = 0; i < size; i += 3)
-	{
-		
-		//vec3 color;
-		////std::cout << i << std::endl;
-		///*if (row > height / 2)
-		//{*/
-		//	if (col > width / 2)
-		//		color = vec3(255, 0, 0);
-		//	else
-		//		color = vec3(0, 255, 0);
-		////}
-		////else // Mitad superior
-		//{
-		//	// derecha
-		//	if (col > width / 2)
-		//		color = vec3(0, 0, 255);
-		//	else
-		//		color = vec3(255, 255, 0);
-		//}
-
-	/*	pixels[i] = color.x;
-		pixels[i + 1] = color.y;
-		pixels[i + 2] = color.z; */
-		pixels[i] = (BYTE)image[row][col].x;
-		pixels[i + 1] = (BYTE)image[row][col].y;
-		pixels[i + 2] = (BYTE)image[row][col].z;
-		//PrintVector2("Image color" , image[row][col]);
-
-		col++;
-
-		if (col >= width)
-		{
-			col = 0;
-			row++;			
-		}
-	}
-
-
-
-	/*for (int i = 0; i < size; i+=3)
-	{
-		if((int)pixels[i] != 0 || (int)pixels[i+1] != 0 || (int)pixels[i+2] != 0)
-			cout << "Pixels" << (int)pixels[i] << ", " << (int)pixels[i + 1] << ", " << (int)pixels[i + 2] << ", " << endl;
-	}*/
-	return pixels;
-}
+// BYTE * MyImage::ConvertToOneRowArray()
+// {
+// 	if (!image) 
+// 		return nullptr;
+//
+// 	int size = 3 * width * height;
+// 	BYTE *pixels = new BYTE[size];
+// 	int row = 0;
+// 	int col = 0;
+//
+// 	// create matrix color 
+// 	//vec3 ** imageAux = new vec3*[height];
+//
+// 	//for (int i = 0; i < height; i++)
+// 	//{
+// 	//	imageAux[i] = new vec3[width];
+// 	//}
+//
+// 	//for (int i = 0; i < width; i++)
+// 	//	for (int j = 0; j < height; j++)
+// 	//	{
+// 	//		image
+// 	//	}
+//
+//
+// 	//for (int i = size-1-3; i >= 0; i -= 3)
+// 	for (int i = 0; i < size; i += 3)
+// 	{
+// 		
+// 		//vec3 color;
+// 		////std::cout << i << std::endl;
+// 		///*if (row > height / 2)
+// 		//{*/
+// 		//	if (col > width / 2)
+// 		//		color = vec3(255, 0, 0);
+// 		//	else
+// 		//		color = vec3(0, 255, 0);
+// 		////}
+// 		////else // Mitad superior
+// 		//{
+// 		//	// derecha
+// 		//	if (col > width / 2)
+// 		//		color = vec3(0, 0, 255);
+// 		//	else
+// 		//		color = vec3(255, 255, 0);
+// 		//}
+//
+// 	/*	pixels[i] = color.x;
+// 		pixels[i + 1] = color.y;
+// 		pixels[i + 2] = color.z; */
+// 		pixels[i] = (BYTE)image[row][col].x;
+// 		pixels[i + 1] = (BYTE)image[row][col].y;
+// 		pixels[i + 2] = (BYTE)image[row][col].z;
+// 		//PrintVector2("Image color" , image[row][col]);
+//
+// 		col++;
+//
+// 		if (col >= width)
+// 		{
+// 			col = 0;
+// 			row++;			
+// 		}
+// 	}
+//
+//
+//
+// 	/*for (int i = 0; i < size; i+=3)
+// 	{
+// 		if((int)pixels[i] != 0 || (int)pixels[i+1] != 0 || (int)pixels[i+2] != 0)
+// 			cout << "Pixels" << (int)pixels[i] << ", " << (int)pixels[i + 1] << ", " << (int)pixels[i + 2] << ", " << endl;
+// 	}*/
+// 	return pixels;
+// }
