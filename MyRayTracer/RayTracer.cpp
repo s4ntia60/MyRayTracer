@@ -35,29 +35,29 @@ MyImage RayTracer::RayTrace(Camera *cam, const Scene *scene, int width, int heig
 	
 
 	for(int j =0; j < height; j++ ) // along vertical
+  {
 		for (int i = 0; i < width; i++) // along horizontal
-		{
-			/*if (i > 292 && j > 270)
-				isDebbuging = true;*/
-				
-			float Xmid = (float)i + 0.5f;
-			float Ymid = (float)j + 0.5f;
-			//PrintStats(i, j, cam->width, cam->height);
-			Ray ray =  cam->RayThruPixel(Xmid, Ymid);
-			//Ray ray =  cam->RayThruPixel2(Xmid, Ymid);
-			
-			//Ray ray = cam->eyeRay(Xmid, Ymid, width, height);
-			HitInfo hit = Intersect(ray, scene);
-			//vec3 color = vec3(FindColor(hit, scene));
-			//vec3 color = vec3(RecursiveCall(RENDERSETTINGS->tracerDepth, hit, scene));
-			vec3 color = vec3(Radiance(ray, RENDERSETTINGS->tracerDepth, scene));
-			image.image[j][i] = clamp(color, 0.0f, 1.0f) * 255.0f;
+    {
+      /*if (i > 292 && j > 270)
+        isDebbuging = true;*/
 
-			if(i == 0)
-				cout << "Progress " << ((float)j/(float)height)*100.f << "%" << endl;
-		}
+      float Xmid = (float)i + 0.5f;
+      float Ymid = (float)j + 0.5f;
+      //PrintStats(i, j, cam->width, cam->height);
+      Ray ray =  cam->RayThruPixel(Xmid, Ymid);
+      //Ray ray =  cam->RayThruPixel2(Xmid, Ymid);
 
-	return image;
+      //Ray ray = cam->eyeRay(Xmid, Ymid, width, height);
+      HitInfo hit = Intersect(ray, scene);
+      //vec3 color = vec3(FindColor(hit, scene));
+      //vec3 color = vec3(RecursiveCall(RENDERSETTINGS->tracerDepth, hit, scene));
+      vec3 color = vec3(Radiance(ray, RENDERSETTINGS->tracerDepth, scene));
+      image.image[j][i] = clamp(color, 0.0f, 1.0f) * 255.0f;
+
+    }
+    cout << "Progress " << ((float)j/(float)height)*100.f << "%" << endl;
+  }
+  return image;
 }
 
 

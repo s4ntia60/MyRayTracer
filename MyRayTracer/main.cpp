@@ -61,9 +61,8 @@ int main(int argc, char * argv[])
 
 	cout << "Scene File: " << sceneFile << endl;
 
-	string fname = string("imgResult.png");
-
-
+  std::string outputFileName = "";
+  outputFileName.append(sceneFile).append("imagResult.png");
 
 	RayTracer tracer;
 
@@ -75,10 +74,14 @@ int main(int argc, char * argv[])
 
 	MyImage image = tracer.RayTrace(cam, scene, RENDERSETTINGS->width, RENDERSETTINGS->height);
 
-	// SaveImageFile(image, "" + RENDERSETTINGS->outputFile);
-  // std::vector<unsigned char> data = image.to_char_vector();
   std::vector<unsigned char> data = image.to_char_vector();
-  return stbi_write_png( "foo.png", RENDERSETTINGS->width, RENDERSETTINGS->height, 4, &(data[0]), 4*RENDERSETTINGS->width);
+  
+  return stbi_write_png(outputFileName.c_str(), 
+      RENDERSETTINGS->width,
+      RENDERSETTINGS->height,
+      4, 
+      &(data[0]),
+      4*RENDERSETTINGS->width);
 /* 	system("PAUSE"); */
 
 	return 0;
